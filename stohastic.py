@@ -68,22 +68,17 @@ gone = 0
 last_index = 0
 for i in range(NUMBER_OF_STEPS):
     print("\nSTEP" + str(i))
-    new_customer = None
+    #new_customer = None
     # достаем людей, которые пришли в данную секунду (а что, если несколько человек в одно время?)
     new_customers = [customer for customer in list_of_customers if customer.time_when_customer_will_arrive == i]
-    print("New customer in current time: " + str(len(new_customers)))
-    for customer in list_of_customers:
-        if (customer.time_when_customer_will_arrive == i):
-            new_customer = customer
-            break
-    
+    print("New customers in current time: " + str(len(new_customers)))    
 
     # обрабатываем людей
     for handler in list_of_handlers:
         handler.process_customer()
 
     # если есть пустые кассы, то пихаем туда человека
-    if (new_customer is not None):
+    for new_customer in new_customers:
         is_wait = True
         for handler in list_of_handlers:
             if handler.customer is None:
@@ -91,10 +86,12 @@ for i in range(NUMBER_OF_STEPS):
                 handler.customer = new_customer
                 is_wait = False
                 break
+
         # иначе счетчик ушедших++
         if (is_wait):
             print("Gone!")
-            gone += 1    
+            gone += 1  
+
     # продолжаем
 
 print(gone)
